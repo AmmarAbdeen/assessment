@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: my-postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+  my-spring-boot-app:
+    image: tomcat:9-jdk11-openjdk-slim
+    volumes:
+      - ./my-spring-boot-app.war:/usr/local/tomcat/webapps/my-spring-boot-app.war
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
